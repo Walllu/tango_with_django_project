@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html>
+	<head>
+		<title>About Rango</title>
+	</head>
+	<body>
+		<h1>Rango says...</h1>
+		<div>
+		 <br />
+			<strong> {{boldmessage}}</strong><br />
+			This tutorial was put together by Walter Leinonen
+		</div>
+		<div>
+			<a href="/rango/">Index</a><br />
+			<img src="{{ MEDIA_URL }}cat.jpg" alt="Picture of a cat" />
+
+		</div>
+	</body>
+</html>
