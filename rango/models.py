@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -28,3 +29,17 @@ class Page(models.Model):
 
     def __str__(self):
         return self.title
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+
+    #additional attribute to include to the User Model that Django provides
+    website = models.URLField(blank=True)
+    picture = models.ImageField(upload_to='profile_images', blank=True)
+
+    #Override the __unicode__() method to return out something meaningful!
+    #If you're using Python 2.7.x define __unicode__ too!
+
+    def __str__(self):
+        return self.user.username
+    

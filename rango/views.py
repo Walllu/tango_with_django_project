@@ -4,8 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse
 from rango.models import Category, Page
-from rango.forms import CategoryForm
-from rango.forms import PageForm
+from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -75,3 +74,52 @@ def add_page(request, category_name_slug):
             print(form.errors)
     context_dict = {'form':form, 'category':category}
     return render(request, 'rango/add_page.html', context_dict)
+
+def register(request):
+    # a boolean to keep track of whether or not registration worked
+    registered = False
+    if request.method == 'POST':
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileForm(data=request.POST)
+
+        #if the two forms are valid
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            #hash the password with set_password method
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+            profile.save()
+            registered = True
+        else:
+            #invalid form or forms
+            print(user_form.errors, profile_form.errors)
+    else:
+        # Not a HTTP POST, so we render our form using two ModelForm instances
+        # These forms will be blank, ready for user input
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+    context = {'user_form':user_form, 'profile_form': profile_form, 'registered': registered}
+    return render(request, 'rango/register.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
