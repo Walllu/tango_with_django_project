@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -138,6 +139,12 @@ def user_login(request):
     else:
         #No context variables hence the empty dictionary
         return render(request, 'rango/login.html', {})
+
+@login_required
+def user_logout(request):
+    #As this function is being executed given the login_required decorator, we can just go ahead and logout
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
 
 
 
