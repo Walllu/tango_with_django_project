@@ -129,6 +129,9 @@ USE_L10N = True
 USE_TZ = True
 
 
+#This is for where to redirect people that try to access restricted pages
+LOGIN_URL = '/rango/login/'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
