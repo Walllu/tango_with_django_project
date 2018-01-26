@@ -5,6 +5,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -107,15 +110,31 @@ def register(request):
     context = {'user_form':user_form, 'profile_form': profile_form, 'registered': registered}
     return render(request, 'rango/register.html', context)
 
-
-
-
-
-
-
-
-
-
+def user_login(request):
+    if request.method == 'POST':
+        # use request.Post.get('<variable>') instead of request.POST['<variable>'] because the first returns
+        # None if the value doesn't exist, and the latter method returns a KeyError exception in the same situation
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        user = authenticate(username=username, password=password)
+        if user:
+            # is the account enabled or disabled?
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                # account is inactive, so no logging in for youu
+                return HttpResponse("Your Rango account is disabled")
+        else:
+            # Bad login details were provided
+            print("Invalid login details: {0}, {1}".format(username, password))
+            return HttpResponse("Invalid login details supplied.")
+    # request is not a HTTP POST so display the login form
+    # this scenario will most likely be a HTTP GET
+    else:
+        #No context variables hence the empty dictionary
+        return render(request, 'rango/login.html', {})
 
 
 
