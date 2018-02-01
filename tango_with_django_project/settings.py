@@ -28,6 +28,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# The following settings refer to the django-registration-redux
+# If True, users can register
+REGISTRATION_OPEN = True
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_AUTO_LOGIN = True
+LOGIN_REDIRECT_URL = '/rango'
+LOGIN_URL = '/accounts/login'
+
+
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
@@ -43,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rango',
+    'registration',
 ]
 
 MIDDLEWARE = [
@@ -130,7 +140,7 @@ USE_TZ = True
 
 
 #This is for where to redirect people that try to access restricted pages
-LOGIN_URL = '/rango/login/'
+#LOGIN_URL = '/rango/login/'   #2.1.2018-reimplemented above within django-registration-redux
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
